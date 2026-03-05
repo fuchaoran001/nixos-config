@@ -10,10 +10,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  environment.sessionVariables = {
-    NIXOS_CONFIG = "/home/f/nixos-config/configuration.nix";
-  };
-
+  environment.etc."nixos-flake".source = "/home/f/nixos-config";
+  
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -74,13 +72,12 @@
     default_session = {
       command = ''
         ${pkgs.tuigreet}/bin/tuigreet \
-          --sessions ${config.services.xserver.displayManager.sessionData.desktops}/share/wayland-sessions \
+          --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
           --remember-session \
           --remember \
           --time \
-          --asterisks \           #输入密码时显示 * 号
-          # --cmd "sleep 1 && %"  #登录成功后执行的命令
-          --exclude-desktops gnome.desktop  # 排除 X11 版本的 GNOME
+          --asterisks \          
+          --exclude-desktops gnome.desktop 
           --power-menu "shutdown,reboot"
       '';
       user = "greeter";  #用低权限用户 greeter 运行登录界面（安全考虑）
@@ -136,6 +133,10 @@
     ];
   };
   
+
+
+
+
   
   programs.firefox.enable = true;
 
@@ -148,10 +149,13 @@
   environment.systemPackages = with pkgs; [
    alacritty
    git
+   google-chrome
    gnomeExtensions.kimpanel 
   ];
 
  
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
