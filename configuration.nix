@@ -151,6 +151,7 @@
    git
    google-chrome
    gnomeExtensions.kimpanel 
+   tofi
   ];
 
  
